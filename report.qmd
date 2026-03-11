@@ -1,0 +1,116 @@
+---
+title: "Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos"
+author:
+  - Adriano Porto
+  - Kauan
+date: today
+lang: pt
+
+format:
+  html:
+    minimal: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+```
+
+# Introdução
+
+A taxa de mortalidade infantil (TMI) é um dos principais indicadores utilizados para avaliar as condições de saúde e desenvolvimento socioeconômico de uma população. Esse indicador reflete não apenas a qualidade da assistência médica disponível, mas também aspectos estruturais da sociedade, como condições de saneamento, renda, educação e desigualdade social.
+
+Diversos fatores socioeconômicos podem influenciar diretamente os níveis de mortalidade infantil. Entre esses fatores destacam-se o acesso ao saneamento básico, o nível de renda da população, a cobertura de serviços de atenção primária à saúde, o nível educacional da população e indicadores de desigualdade econômica.
+
+Neste estudo busca-se analisar a relação entre a taxa de mortalidade infantil e diferentes indicadores socioeconômicos e de infraestrutura de saúde. Para isso, será utilizada uma base de dados contendo variáveis relacionadas a condições econômicas, sociais e de acesso à saúde.
+
+O objetivo principal desta análise é investigar possíveis associações entre a taxa de mortalidade infantil e variáveis socioeconômicas, além de realizar uma análise exploratória inicial da base de dados.
+
+# Descrição da Base de Dados
+
+A base de dados utilizada neste estudo contém informações relacionadas a indicadores socioeconômicos e de saúde pública. Cada observação corresponde a uma unidade geográfica, podendo representar estados ou municípios, contendo variáveis explicativas que podem influenciar a taxa de mortalidade infantil.
+
+## Leitura da base de dados
+
+```{r}
+library(readxl)
+
+dados <- read_excel("dados.xlsx")
+
+head(dados)
+```
+
+## Número de observações
+
+```{r}
+nrow(dados)
+```
+
+## Estrutura da base de dados
+
+```{r}
+str(dados)
+```
+
+## Variáveis da base de dados
+
+| Variável | Significado | Unidade |
+|--------------------|--------------------------------|--------------------|
+| tmi | Taxa de mortalidade infantil | óbitos por 1000 nascidos vivos |
+| saneamento | Percentual da população com acesso a saneamento básico | \% |
+| pib_percapita | Produto Interno Bruto per capita | R\$ |
+| psf | Cobertura da Estratégia Saúde da Família | \% |
+| analfabetismo | Taxa de analfabetismo | \% |
+| gini | Índice de desigualdade de renda | 0 a 1 |
+| idh | Índice de Desenvolvimento Humano | 0 a 1 |
+| renda_percapita | Renda média per capita | R\$ |
+| leitos | Número de leitos hospitalares | leitos por 1000 habitantes |
+| regiao | Região geográfica | variável categórica |
+
+# Análise Exploratória de Dados
+
+Antes da construção de modelos estatísticos, é importante realizar uma análise exploratória da base de dados. Essa etapa permite compreender melhor as características das variáveis, identificar possíveis valores ausentes e detectar a presença de valores extremos (outliers).
+
+## Estatísticas descritivas
+
+```{r}
+summary(dados)
+```
+
+## Verificação de valores ausentes
+
+```{r}
+colSums(is.na(dados))
+```
+
+## Distribuição da Taxa de Mortalidade Infantil
+
+```{r}
+ggplot(dados, aes(x = tmi)) +
+  geom_histogram(bins = 10, fill = "lightblue", color = "black") +
+  labs(
+    title = "Distribuição da Taxa de Mortalidade Infantil",
+    x = "TMI",
+    y = "Frequência"
+  )
+```
+
+## Identificação de possíveis outliers
+
+```{r}
+boxplot(dados$tmi,
+        main = "Boxplot da Taxa de Mortalidade Infantil",
+        ylab = "TMI")
+```
+
+A análise exploratória permite identificar padrões iniciais nos dados e possíveis inconsistências na base de dados, como valores ausentes ou observações extremas. Essas informações são importantes para orientar as etapas seguintes da análise estatística e garantir maior confiabilidade nos resultados obtidos posteriormente.

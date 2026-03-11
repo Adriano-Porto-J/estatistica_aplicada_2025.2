@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Adriano Porto">
+<meta name="author" content="Kauan">
+<meta name="dcterms.date" content="2026-03-11">
+
+<title>Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<header id="title-block-header">
+<h1 class="title">Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos</h1>
+<p class="author">Adriano Porto</p>
+<p class="author">Kauan</p>
+
+<p class="date">2026-03-11</p>
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução"><span class="header-section-number">1</span> Introdução</a></li>
+  <li><a href="#descrição-da-base-de-dados" id="toc-descrição-da-base-de-dados"><span class="header-section-number">2</span> Descrição da Base de Dados</a>
+  <ul>
+  <li><a href="#leitura-da-base-de-dados" id="toc-leitura-da-base-de-dados"><span class="header-section-number">2.1</span> Leitura da base de dados</a></li>
+  <li><a href="#número-de-observações" id="toc-número-de-observações"><span class="header-section-number">2.2</span> Número de observações</a></li>
+  <li><a href="#estrutura-da-base-de-dados" id="toc-estrutura-da-base-de-dados"><span class="header-section-number">2.3</span> Estrutura da base de dados</a></li>
+  <li><a href="#variáveis-da-base-de-dados" id="toc-variáveis-da-base-de-dados"><span class="header-section-number">2.4</span> Variáveis da base de dados</a></li>
+  </ul></li>
+  <li><a href="#análise-exploratória-de-dados" id="toc-análise-exploratória-de-dados"><span class="header-section-number">3</span> Análise Exploratória de Dados</a>
+  <ul>
+  <li><a href="#estatísticas-descritivas" id="toc-estatísticas-descritivas"><span class="header-section-number">3.1</span> Estatísticas descritivas</a></li>
+  <li><a href="#verificação-de-valores-ausentes" id="toc-verificação-de-valores-ausentes"><span class="header-section-number">3.2</span> Verificação de valores ausentes</a></li>
+  <li><a href="#distribuição-da-taxa-de-mortalidade-infantil" id="toc-distribuição-da-taxa-de-mortalidade-infantil"><span class="header-section-number">3.3</span> Distribuição da Taxa de Mortalidade Infantil</a></li>
+  <li><a href="#identificação-de-possíveis-outliers" id="toc-identificação-de-possíveis-outliers"><span class="header-section-number">3.4</span> Identificação de possíveis outliers</a></li>
+  </ul></li>
+  </ul>
+</nav>
+<h1 data-number="1" id="introdução"><span class="header-section-number">1</span> Introdução</h1>
+<p>A taxa de mortalidade infantil (TMI) é um dos principais indicadores utilizados para avaliar as condições de saúde e desenvolvimento socioeconômico de uma população. Esse indicador reflete não apenas a qualidade da assistência médica disponível, mas também aspectos estruturais da sociedade, como condições de saneamento, renda, educação e desigualdade social.</p>
+<p>Diversos fatores socioeconômicos podem influenciar diretamente os níveis de mortalidade infantil. Entre esses fatores destacam-se o acesso ao saneamento básico, o nível de renda da população, a cobertura de serviços de atenção primária à saúde, o nível educacional da população e indicadores de desigualdade econômica.</p>
+<p>Neste estudo busca-se analisar a relação entre a taxa de mortalidade infantil e diferentes indicadores socioeconômicos e de infraestrutura de saúde. Para isso, será utilizada uma base de dados contendo variáveis relacionadas a condições econômicas, sociais e de acesso à saúde.</p>
+<p>O objetivo principal desta análise é investigar possíveis associações entre a taxa de mortalidade infantil e variáveis socioeconômicas, além de realizar uma análise exploratória inicial da base de dados.</p>
+<h1 data-number="2" id="descrição-da-base-de-dados"><span class="header-section-number">2</span> Descrição da Base de Dados</h1>
+<p>A base de dados utilizada neste estudo contém informações relacionadas a indicadores socioeconômicos e de saúde pública. Cada observação corresponde a uma unidade geográfica, podendo representar estados ou municípios, contendo variáveis explicativas que podem influenciar a taxa de mortalidade infantil.</p>
+<h2 data-number="2.1" id="leitura-da-base-de-dados"><span class="header-section-number">2.1</span> Leitura da base de dados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dados <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"dados.xlsx"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dados)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+     id   tmi saneamento pib_percapita cobertura_psf analfabetismo  gini   idh
+  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1  9.99       74.4          25.1          73.4           7.8 0.569 0.95 
+2     2 23.7        62.4          19.4          73.3          19.4 0.588 0.938
+3     3  1.5        82.4          36.2          72.8           2.7 0.521 0.95 
+4     4  2.47       75.4          28.6          68.8           8.9 0.492 0.95 
+5     5 16.1        68.3          21.2          78.1          13.5 0.45  0.95 
+6     6  1.5        87.2          30.4          94.7           5   0.506 0.95 
+# ℹ 3 more variables: renda_percapita &lt;dbl&gt;, leitos_mil &lt;dbl&gt;, regiao &lt;chr&gt;</code></pre>
+</div>
+</div>
+<h2 data-number="2.2" id="número-de-observações"><span class="header-section-number">2.2</span> Número de observações</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(dados)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 300</code></pre>
+</div>
+</div>
+<h2 data-number="2.3" id="estrutura-da-base-de-dados"><span class="header-section-number">2.3</span> Estrutura da base de dados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dados)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [300 × 11] (S3: tbl_df/tbl/data.frame)
+ $ id             : num [1:300] 1 2 3 4 5 6 7 8 9 10 ...
+ $ tmi            : num [1:300] 9.99 23.74 1.5 2.47 16.11 ...
+ $ saneamento     : num [1:300] 74.4 62.4 82.4 75.4 68.3 87.2 48 52.3 72.7 98.5 ...
+ $ pib_percapita  : num [1:300] 25.1 19.4 36.2 28.6 21.2 ...
+ $ cobertura_psf  : num [1:300] 73.4 73.3 72.8 68.8 78.1 94.7 58.8 59 66.3 73.4 ...
+ $ analfabetismo  : num [1:300] 7.8 19.4 2.7 8.9 13.5 5 22.2 24.1 7.7 8.8 ...
+ $ gini           : num [1:300] 0.569 0.588 0.521 0.492 0.45 0.506 0.552 0.596 0.566 0.479 ...
+ $ idh            : num [1:300] 0.95 0.938 0.95 0.95 0.95 0.95 0.802 0.842 0.95 0.95 ...
+ $ renda_percapita: num [1:300] 1693 1445 2443 2094 1451 ...
+ $ leitos_mil     : num [1:300] 0.84 2.21 2.76 2.02 1.6 2.72 0.89 0.2 0.2 0.69 ...
+ $ regiao         : chr [1:300] "Sul" "Nordeste" "Sudeste" "Sudeste" ...</code></pre>
+</div>
+</div>
+<h2 data-number="2.4" id="variáveis-da-base-de-dados"><span class="header-section-number">2.4</span> Variáveis da base de dados</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 44%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Significado</th>
+<th>Unidade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>tmi</td>
+<td>Taxa de mortalidade infantil</td>
+<td>óbitos por 1000 nascidos vivos</td>
+</tr>
+<tr class="even">
+<td>saneamento</td>
+<td>Percentual da população com acesso a saneamento básico</td>
+<td>%</td>
+</tr>
+<tr class="odd">
+<td>pib_percapita</td>
+<td>Produto Interno Bruto per capita</td>
+<td>R$</td>
+</tr>
+<tr class="even">
+<td>psf</td>
+<td>Cobertura da Estratégia Saúde da Família</td>
+<td>%</td>
+</tr>
+<tr class="odd">
+<td>analfabetismo</td>
+<td>Taxa de analfabetismo</td>
+<td>%</td>
+</tr>
+<tr class="even">
+<td>gini</td>
+<td>Índice de desigualdade de renda</td>
+<td>0 a 1</td>
+</tr>
+<tr class="odd">
+<td>idh</td>
+<td>Índice de Desenvolvimento Humano</td>
+<td>0 a 1</td>
+</tr>
+<tr class="even">
+<td>renda_percapita</td>
+<td>Renda média per capita</td>
+<td>R$</td>
+</tr>
+<tr class="odd">
+<td>leitos</td>
+<td>Número de leitos hospitalares</td>
+<td>leitos por 1000 habitantes</td>
+</tr>
+<tr class="even">
+<td>regiao</td>
+<td>Região geográfica</td>
+<td>variável categórica</td>
+</tr>
+</tbody>
+</table>
+<h1 data-number="3" id="análise-exploratória-de-dados"><span class="header-section-number">3</span> Análise Exploratória de Dados</h1>
+<p>Antes da construção de modelos estatísticos, é importante realizar uma análise exploratória da base de dados. Essa etapa permite compreender melhor as características das variáveis, identificar possíveis valores ausentes e detectar a presença de valores extremos (outliers).</p>
+<h2 data-number="3.1" id="estatísticas-descritivas"><span class="header-section-number">3.1</span> Estatísticas descritivas</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dados)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id              tmi           saneamento    pib_percapita  
+ Min.   :  1.00   Min.   : 1.500   Min.   :14.60   Min.   : 3.00  
+ 1st Qu.: 75.75   1st Qu.: 9.863   1st Qu.:52.15   1st Qu.:11.68  
+ Median :150.50   Median :18.570   Median :63.80   Median :19.64  
+ Mean   :150.50   Mean   :19.890   Mean   :63.26   Mean   :20.11  
+ 3rd Qu.:225.25   3rd Qu.:28.890   3rd Qu.:74.40   3rd Qu.:27.22  
+ Max.   :300.00   Max.   :48.820   Max.   :99.50   Max.   :53.87  
+                                   NA's   :5                      
+ cobertura_psf   analfabetismo        gini             idh        
+ Min.   :32.70   Min.   : 0.00   Min.   :0.3630   Min.   :0.5980  
+ 1st Qu.:56.08   1st Qu.: 6.80   1st Qu.:0.5020   1st Qu.:0.7945  
+ Median :64.95   Median :11.40   Median :0.5550   Median :0.9500  
+ Mean   :64.44   Mean   :11.95   Mean   :0.5515   Mean   :0.8684  
+ 3rd Qu.:73.40   3rd Qu.:16.10   3rd Qu.:0.6022   3rd Qu.:0.9500  
+ Max.   :98.80   Max.   :30.40   Max.   :0.7340   Max.   :0.9500  
+ NA's   :4       NA's   :3                                        
+ renda_percapita    leitos_mil       regiao         
+ Min.   : 150.0   Min.   :0.200   Length:300        
+ 1st Qu.: 797.2   1st Qu.:0.400   Class :character  
+ Median :1411.0   Median :0.940   Mode  :character  
+ Mean   :1419.6   Mean   :1.029                     
+ 3rd Qu.:1947.2   3rd Qu.:1.460                     
+ Max.   :3710.0   Max.   :3.300                     
+                  NA's   :3                         </code></pre>
+</div>
+</div>
+<h2 data-number="3.2" id="verificação-de-valores-ausentes"><span class="header-section-number">3.2</span> Verificação de valores ausentes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(dados))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             id             tmi      saneamento   pib_percapita   cobertura_psf 
+              0               0               5               0               4 
+  analfabetismo            gini             idh renda_percapita      leitos_mil 
+              3               0               0               0               3 
+         regiao 
+              0 </code></pre>
+</div>
+</div>
+<h2 data-number="3.3" id="distribuição-da-taxa-de-mortalidade-infantil"><span class="header-section-number">3.3</span> Distribuição da Taxa de Mortalidade Infantil</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dados, <span class="fu">aes</span>(<span class="at">x =</span> tmi)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribuição da Taxa de Mortalidade Infantil"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"TMI"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frequência"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img src="report_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<h2 data-number="3.4" id="identificação-de-possíveis-outliers"><span class="header-section-number">3.4</span> Identificação de possíveis outliers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(dados<span class="sc">$</span>tmi,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Boxplot da Taxa de Mortalidade Infantil"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"TMI"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img src="report_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A análise exploratória permite identificar padrões iniciais nos dados e possíveis inconsistências na base de dados, como valores ausentes ou observações extremas. Essas informações são importantes para orientar as etapas seguintes da análise estatística e garantir maior confiabilidade nos resultados obtidos posteriormente.</p>
+
+
+
+
+
+</body></html>
