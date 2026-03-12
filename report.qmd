@@ -8,10 +8,11 @@ lang: pt
 
 format:
   html:
-    minimal: true
+    theme: cosmo
     toc: true
     toc-depth: 3
     number-sections: true
+  pdf: default
 
 editor: visual
 ---
@@ -24,6 +25,10 @@ editor: visual
 
 library(dplyr)
 library(ggplot2)
+library(readxl)
+library(corrplot)
+library(rlang)
+library(skimr)
 ```
 
 # Introdução
@@ -43,9 +48,12 @@ A base de dados utilizada neste estudo contém informações relacionadas a indi
 ## Leitura da base de dados
 
 ```{r}
-library(readxl)
-
 dados <- read_excel("dados.xlsx")
+
+dados$regiao <- factor(
+  dados$regiao,
+  levels = c("Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul")
+)
 
 head(dados)
 ```
@@ -59,33 +67,34 @@ nrow(dados)
 ## Estrutura da base de dados
 
 ```{r}
-str(dados)
+glimpse(dados)
+```
+
+## Estatísticas descritivas detalhadas
+
+```{r}
+
+skim(dados)
 ```
 
 ## Variáveis da base de dados
 
 | Variável | Significado | Unidade |
-|--------------------|--------------------------------|--------------------|
+|----------|-------------|--------|
 | tmi | Taxa de mortalidade infantil | óbitos por 1000 nascidos vivos |
-| saneamento | Percentual da população com acesso a saneamento básico | \% |
-| pib_percapita | Produto Interno Bruto per capita | R\$ |
-| psf | Cobertura da Estratégia Saúde da Família | \% |
-| analfabetismo | Taxa de analfabetismo | \% |
+| saneamento | Percentual da população com acesso a saneamento básico | % |
+| pib_percapita | Produto Interno Bruto per capita | R$ |
+| psf | Cobertura da Estratégia Saúde da Família | % |
+| analfabetismo | Taxa de analfabetismo | % |
 | gini | Índice de desigualdade de renda | 0 a 1 |
 | idh | Índice de Desenvolvimento Humano | 0 a 1 |
-| renda_percapita | Renda média per capita | R\$ |
+| renda_percapita | Renda média per capita | R$ |
 | leitos | Número de leitos hospitalares | leitos por 1000 habitantes |
-| regiao | Região geográfica | variável categórica |
+| regiao | Região geográfica do Brasil (Norte, Nordeste, Centro-Oeste, Sudeste, Sul) | categórica |
 
 # Análise Exploratória de Dados
 
 Antes da construção de modelos estatísticos, é importante realizar uma análise exploratória da base de dados. Essa etapa permite compreender melhor as características das variáveis, identificar possíveis valores ausentes e detectar a presença de valores extremos (outliers).
-
-## Estatísticas descritivas
-
-```{r}
-summary(dados)
-```
 
 ## Verificação de valores ausentes
 
@@ -108,9 +117,108 @@ ggplot(dados, aes(x = tmi)) +
 ## Identificação de possíveis outliers
 
 ```{r}
-boxplot(dados$tmi,
-        main = "Boxplot da Taxa de Mortalidade Infantil",
-        ylab = "TMI")
+boxplot(
+  dados$tmi,
+  main = "Boxplot da Taxa de Mortalidade Infantil",
+  ylab = "TMI"
+)
 ```
 
-A análise exploratória permite identificar padrões iniciais nos dados e possíveis inconsistências na base de dados, como valores ausentes ou observações extremas. Essas informações são importantes para orientar as etapas seguintes da análise estatística e garantir maior confiabilidade nos resultados obtidos posteriormente.
+A análise exploratória permite identificar padrões iniciais nos dados e possíveis inconsistências na base de dados, como valores ausentes ou observações extremas.
+
+# Análises Bivariadas
+
+## Somente entre variáveis numéricas
+
+```{r}
+dados_num <- dados %>% select_if(is.numeric)
+
+corr_matrix <- cor(dados_num, use = "complete.obs")
+
+corr_matrix
+```
+
+```{r}
+corrplot(
+  corr_matrix,
+  method = "color",
+  type = "upper",
+  addCoef.col = "black",
+  number.cex = 0.65,
+  tl.cex = 0.75,
+  tl.srt = 45
+)
+```
+
+A análise da matriz de correlação indica relações importantes entre as variáveis socioeconômicas e a taxa de mortalidade infantil (TMI).
+
+Observa-se uma forte correlação negativa entre TMI e renda per capita (-0.89), indicando que regiões ou municípios com maior renda tendem a apresentar menores níveis de mortalidade infantil. De forma semelhante, o Índice de Desenvolvimento Humano (IDH) também apresenta correlação negativa elevada com a TMI (-0.83), sugerindo que melhores condições de desenvolvimento humano estão associadas a menores taxas de mortalidade infantil.
+
+O acesso ao saneamento também apresenta correlação negativa significativa com a mortalidade infantil (-0.85), reforçando a importância da infraestrutura sanitária para a saúde pública.
+
+Por outro lado, o analfabetismo apresenta correlação positiva com a TMI (0.76), indicando que locais com maiores níveis de analfabetismo tendem a registrar maiores taxas de mortalidade infantil.
+
+Esses resultados sugerem que fatores socioeconômicos, educacionais e de infraestrutura estão fortemente associados às condições de saúde infantil.
+
+## Variável numérica em função de categórica
+
+```{r}
+ggplot(dados, aes(x = regiao, y = tmi)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_minimal() +
+  labs(
+    title = "Taxa de Mortalidade Infantil por Região do Brasil",
+    x = "Região",
+    y = "TMI"
+  )
+```
+
+Observa-se que a taxa de mortalidade infantil apresenta diferenças importantes entre as cinco regiões do Brasil (Norte, Nordeste, Centro-Oeste, Sudeste e Sul).
+
+As regiões Norte e Nordeste apresentam medianas mais elevadas de TMI, além de maior dispersão dos valores, indicando maior variabilidade entre os municípios dessas regiões.
+
+Em contraste, as regiões Sul e Sudeste apresentam medianas significativamente menores, sugerindo melhores condições socioeconômicas e de acesso a serviços de saúde.
+
+A região Centro-Oeste apresenta valores intermediários, situando-se entre os grupos de maior e menor mortalidade infantil.
+
+Esses resultados indicam desigualdades regionais importantes nas condições de saúde e desenvolvimento.
+
+## Relação entre renda e mortalidade infantil
+
+```{r}
+ggplot(dados, aes(x = renda_percapita, y = tmi)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(
+    title = "Renda per capita vs Mortalidade Infantil",
+    x = "Renda per capita",
+    y = "TMI"
+  )
+```
+
+A relação entre renda per capita e mortalidade infantil apresenta um padrão claramente negativo.
+
+Observa-se que à medida que a renda per capita aumenta, a taxa de mortalidade infantil tende a diminuir. A linha de regressão ajustada confirma essa tendência, indicando uma associação linear negativa entre as variáveis.
+
+Esse resultado sugere que municípios com maior renda possuem melhores condições de vida, maior acesso a serviços de saúde, nutrição adequada e infraestrutura básica, fatores que contribuem para a redução da mortalidade infantil.
+
+## Relação entre saneamento e mortalidade infantil
+
+```{r}
+ggplot(dados, aes(x = saneamento, y = tmi)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(
+    title = "Saneamento vs Mortalidade Infantil",
+    x = "Acesso ao saneamento (%)",
+    y = "TMI"
+  )
+```
+
+A análise do gráfico indica uma relação negativa entre acesso ao saneamento e mortalidade infantil.
+
+Observa-se que municípios com maior porcentagem de acesso ao saneamento tendem a apresentar menores taxas de mortalidade infantil. A linha de regressão reforça essa tendência, indicando uma associação inversa entre as variáveis.
+
+Esse resultado evidencia a importância do saneamento básico para a saúde pública, uma vez que melhores condições sanitárias reduzem a exposição a doenças infecciosas e melhoram as condições de vida da população.
