@@ -2,7 +2,7 @@
 title: "Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos"
 author:
   - Adriano Porto
-  - Kauan
+  - Kauan Brito
 date: today
 lang: pt
 
@@ -29,6 +29,8 @@ library(readxl)
 library(corrplot)
 library(rlang)
 library(skimr)
+library(car)
+library(easystats)
 ```
 
 # Introdução
@@ -80,15 +82,15 @@ skim(dados)
 ## Variáveis da base de dados
 
 | Variável | Significado | Unidade |
-|----------|-------------|--------|
+|-----------------------|------------------------------|-------------------|
 | tmi | Taxa de mortalidade infantil | óbitos por 1000 nascidos vivos |
-| saneamento | Percentual da população com acesso a saneamento básico | % |
-| pib_percapita | Produto Interno Bruto per capita | R$ |
-| psf | Cobertura da Estratégia Saúde da Família | % |
-| analfabetismo | Taxa de analfabetismo | % |
+| saneamento | Percentual da população com acesso a saneamento básico | \% |
+| pib_percapita | Produto Interno Bruto per capita | R\$ |
+| psf | Cobertura da Estratégia Saúde da Família | \% |
+| analfabetismo | Taxa de analfabetismo | \% |
 | gini | Índice de desigualdade de renda | 0 a 1 |
 | idh | Índice de Desenvolvimento Humano | 0 a 1 |
-| renda_percapita | Renda média per capita | R$ |
+| renda_percapita | Renda média per capita | R\$ |
 | leitos | Número de leitos hospitalares | leitos por 1000 habitantes |
 | regiao | Região geográfica do Brasil (Norte, Nordeste, Centro-Oeste, Sudeste, Sul) | categórica |
 
@@ -222,3 +224,131 @@ A análise do gráfico indica uma relação negativa entre acesso ao saneamento 
 Observa-se que municípios com maior porcentagem de acesso ao saneamento tendem a apresentar menores taxas de mortalidade infantil. A linha de regressão reforça essa tendência, indicando uma associação inversa entre as variáveis.
 
 Esse resultado evidencia a importância do saneamento básico para a saúde pública, uma vez que melhores condições sanitárias reduzem a exposição a doenças infecciosas e melhoram as condições de vida da população.
+
+# Ajuste do Modelo Inicial de Regressão
+
+Inicialmente foi ajustado um modelo de regressão linear múltipla considerando todas as variáveis explicativas disponíveis na base de dados.
+
+```{r}
+modelo_inicial <- lm(tmi ~ saneamento + pib_percapita + cobertura_psf + analfabetismo 
+                     + gini + idh + renda_percapita + leitos_mil + regiao, data = dados)
+
+summary(modelo_inicial)
+```
+
+Observa-se que o coeficiente de determinação ajustado (R² ajustado) obtido foi de 0.9493, indicando que aproximadamente 94,93% da variabilidade da TMI é explicada pelas variáveis independentes incluídas no modelo, o que sugere um bom nível de ajuste aos dados.
+
+Temos também que a variável leitos_mil, que indica o número de leitos hospitalares por mil habitantes, apresenta valor-p elevado, indicando menor evidência de associação com a variável resposta do modelo.
+
+## Diagnóstico de Multicolinearidade
+
+```{r}
+vif(modelo_inicial)
+```
+
+A análise de multicolinearidade do modelo inicial, através do VIF, indicou uma alta correlação entre pib_percapita e renda_percapita.
+
+Esse resultado é esperado, visto que, além do que foi exposto pela matriz de correlação da análise bivariada dos dados, ambas representam indicadores de nível econômico da população,. Dessa forma, na etapa de seleção do melhor modelo, será considerada a remoção de uma dessas variáveis a fim de reduzir o problema de multicolinearidade.
+
+# Seleção de Modelo
+
+## Com ou Sem Leitos por Mil Habitantes
+
+```{r}
+modelo_sem_leitos <- update(modelo_inicial, . ~ . - leitos_mil)
+
+summary(modelo_sem_leitos)
+```
+
+```{r}
+AIC(modelo_inicial)
+```
+```{r}
+AIC(modelo_sem_leitos)
+```
+
+Foi avaliada a remoção da variável leitos_mil, uma vez que essa variável apresentou p-valor elevado no modelo inicial. Para isso, foi ajustado um modelo alternativo excluindo essa variável.
+
+Observou-se que o R² ajustado apresentou pequeno aumento, passando de aproximadamente 0.9493 para 0.9503, indicando leve melhora na proporção de variabilidade explicada pelo modelo.
+
+Entretanto, ao comparar os modelos utilizando o Critério de Informação de Akaike (AIC), verificou-se que o modelo inicial apresentou AIC = 1392,245, enquanto o modelo sem a variável leitos_mil apresentou AIC = 1402,693.
+
+Como a diferença nos valores de AIC foi maior que 10, conclui-se que a remoção da variável leitos por mil habitantes resultou em pior desempenho do modelo. Dessa forma, optou-se por manter essa variável no modelo.
+
+## PIB per capita ou Renda per capita
+
+### Apenas PIB per capita
+
+```{r}
+modelo_apenas_pib <- update(modelo_inicial, . ~ . - renda_percapita)
+
+summary(modelo_apenas_pib)
+```
+
+### Apenas Renda per capita
+```{r}
+modelo_apenas_renda <- update(modelo_inicial, . ~ . - pib_percapita)
+
+summary(modelo_apenas_renda)
+```
+
+### Comparação de valores AIC
+
+```{r}
+AIC(modelo_apenas_pib)
+```
+
+```{r}
+AIC(modelo_apenas_renda)
+```
+
+Considerando a forte multicolinearidade observada entre as variáveis PIB per capita e Renda per capita, foram ajustados dois modelos alternativos: um mantendo apenas a variável PIB per capita e outro mantendo apenas a variável renda per capita.
+
+Observou-se que o modelo contendo apenas PIB per capita apresentou R² ajustado = 0,9487 e AIC = 1394,935, enquanto o modelo contendo apenas renda per capita apresentou R² ajustado = 0,9493 e AIC = 1391,534.
+
+Como o modelo com renda per capita apresentou maior poder explicativo e menor valor de AIC, conclui-se que ele apresenta melhor desempenho. Dessa forma, optou-se por manter a variável renda per capita e remover a variável PIB per capita, resultando em um modelo mais parcimonioso e estatisticamente adequado.
+
+```{r}
+modelo_final <- update(modelo_inicial, . ~ . - pib_percapita)
+
+vif(modelo_final)
+```
+
+Observou-se que as variáveis de renda e analfabetismo apresentaram valores VIF maiores que 5, porém inferiores a 10, indicando multicolinearidade moderada.
+
+Tal resultado é esperado, uma vez que ambas as variáveis representam indicadores socioeconômicos relacionados ao nível de desenvolvimento, sendo plausível a existência de correlação entre elas. Como os valores de VIF permanecem abaixo do limite crítico frequentemente utilizado (VIF > 10), conclui-se que não há evidência de multicolinearidade severa capaz de comprometer a estabilidade das estimativas do modelo.
+
+Dessa forma, optou-se por manter ambas as variáveis no modelo, considerando sua relevância interpretativa para explicar a variabilidade da taxa de mortalidade infantil.
+
+# Checando pressupostos do MRLM
+
+## Plot do R base
+```{r}
+plot(modelo_final)
+```
+
+## Checagem manual do Easystats
+```{r}
+check_normality(modelo_final)
+```
+
+```{r}
+check_heteroscedasticity(modelo_final)
+```
+
+```{r}
+check_outliers(modelo_final)
+```
+
+```{r}
+check_collinearity(modelo_final)
+```
+
+```{r}
+check_autocorrelation(modelo_final)
+```
+
+## Análise gráfica de todos os pressupostos
+```{r, fig.width=5, fig.height=5}
+check_model(modelo_final)
+```

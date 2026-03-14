@@ -9,7 +9,9 @@ install.packages(c(
   "readxl",
   "corrplot",
   "rlang",
-  "skimr"
+  "skimr",
+  "car",
+  "easystats"
 ))
 ```
 Para instalar as bibliotecas do projeto

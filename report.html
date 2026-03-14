@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Adriano Porto">
-<meta name="author" content="Kauan">
+<meta name="author" content="Kauan Brito">
 
 <title>Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -63,15 +66,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="report_files/libs/clipboard/clipboard.min.js"></script>
 <script src="report_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="report_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="report_files/libs/quarto-html/popper.min.js"></script>
 <script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="report_files/libs/quarto-html/anchor.min.js"></script>
 <link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-067f8ab80d092ae3595f7402c2c9b667.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="report_files/libs/bootstrap/bootstrap-ba858d548ad92676443b74b489ccbdac.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="report_files/libs/bootstrap/bootstrap-67270d1595a62d14f123c043d4fb2f18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -106,6 +108,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#relação-entre-renda-e-mortalidade-infantil" id="toc-relação-entre-renda-e-mortalidade-infantil" class="nav-link" data-scroll-target="#relação-entre-renda-e-mortalidade-infantil"><span class="header-section-number">4.3</span> Relação entre renda e mortalidade infantil</a></li>
   <li><a href="#relação-entre-saneamento-e-mortalidade-infantil" id="toc-relação-entre-saneamento-e-mortalidade-infantil" class="nav-link" data-scroll-target="#relação-entre-saneamento-e-mortalidade-infantil"><span class="header-section-number">4.4</span> Relação entre saneamento e mortalidade infantil</a></li>
   </ul></li>
+  <li><a href="#ajuste-do-modelo-inicial-de-regressão" id="toc-ajuste-do-modelo-inicial-de-regressão" class="nav-link" data-scroll-target="#ajuste-do-modelo-inicial-de-regressão"><span class="header-section-number">5</span> Ajuste do Modelo Inicial de Regressão</a>
+  <ul class="collapse">
+  <li><a href="#diagnóstico-de-multicolinearidade" id="toc-diagnóstico-de-multicolinearidade" class="nav-link" data-scroll-target="#diagnóstico-de-multicolinearidade"><span class="header-section-number">5.1</span> Diagnóstico de Multicolinearidade</a></li>
+  </ul></li>
+  <li><a href="#seleção-de-modelo" id="toc-seleção-de-modelo" class="nav-link" data-scroll-target="#seleção-de-modelo"><span class="header-section-number">6</span> Seleção de Modelo</a>
+  <ul class="collapse">
+  <li><a href="#com-ou-sem-leitos-por-mil-habitantes" id="toc-com-ou-sem-leitos-por-mil-habitantes" class="nav-link" data-scroll-target="#com-ou-sem-leitos-por-mil-habitantes"><span class="header-section-number">6.1</span> Com ou Sem Leitos por Mil Habitantes</a></li>
+  <li><a href="#pib-per-capita-ou-renda-per-capita" id="toc-pib-per-capita-ou-renda-per-capita" class="nav-link" data-scroll-target="#pib-per-capita-ou-renda-per-capita"><span class="header-section-number">6.2</span> PIB per capita ou Renda per capita</a>
+  <ul class="collapse">
+  <li><a href="#apenas-pib-per-capita" id="toc-apenas-pib-per-capita" class="nav-link" data-scroll-target="#apenas-pib-per-capita"><span class="header-section-number">6.2.1</span> Apenas PIB per capita</a></li>
+  <li><a href="#apenas-renda-per-capita" id="toc-apenas-renda-per-capita" class="nav-link" data-scroll-target="#apenas-renda-per-capita"><span class="header-section-number">6.2.2</span> Apenas Renda per capita</a></li>
+  <li><a href="#comparação-de-valores-aic" id="toc-comparação-de-valores-aic" class="nav-link" data-scroll-target="#comparação-de-valores-aic"><span class="header-section-number">6.2.3</span> Comparação de valores AIC</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#checando-pressupostos-do-mrlm" id="toc-checando-pressupostos-do-mrlm" class="nav-link" data-scroll-target="#checando-pressupostos-do-mrlm"><span class="header-section-number">7</span> Checando pressupostos do MRLM</a>
+  <ul class="collapse">
+  <li><a href="#plot-do-r-base" id="toc-plot-do-r-base" class="nav-link" data-scroll-target="#plot-do-r-base"><span class="header-section-number">7.1</span> Plot do R base</a></li>
+  <li><a href="#checagem-manual-do-easystats" id="toc-checagem-manual-do-easystats" class="nav-link" data-scroll-target="#checagem-manual-do-easystats"><span class="header-section-number">7.2</span> Checagem manual do Easystats</a></li>
+  <li><a href="#análise-gráfica-de-todos-os-pressupostos" id="toc-análise-gráfica-de-todos-os-pressupostos" class="nav-link" data-scroll-target="#análise-gráfica-de-todos-os-pressupostos"><span class="header-section-number">7.3</span> Análise gráfica de todos os pressupostos</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Outros formatos</h2><ul><li><a href="report.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -124,14 +146,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title-meta-heading">Autores</div>
     <div class="quarto-title-meta-contents">
              <p>Adriano Porto </p>
-             <p>Kauan </p>
+             <p>Kauan Brito </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">11 de março de 2026</p>
+      <p class="date">13 de março de 2026</p>
     </div>
   </div>
   
@@ -211,8 +233,7 @@ $ regiao          &lt;fct&gt; Sul, Nordeste, Sudeste, Sudeste, Nordeste, Sudeste
 <section id="estatísticas-descritivas-detalhadas" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="estatísticas-descritivas-detalhadas"><span class="header-section-number">2.4</span> Estatísticas descritivas detalhadas</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(dados)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(dados)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Data summary</caption>
@@ -456,9 +477,9 @@ $ regiao          &lt;fct&gt; Sul, Nordeste, Sudeste, Sudeste, Nordeste, Sudeste
 <h2 data-number="2.5" class="anchored" data-anchor-id="variáveis-da-base-de-dados"><span class="header-section-number">2.5</span> Variáveis da base de dados</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 32%">
+<col style="width: 31%">
 <col style="width: 41%">
-<col style="width: 25%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -733,6 +754,352 @@ leitos_mil       1.000000000</code></pre>
 <p>A análise do gráfico indica uma relação negativa entre acesso ao saneamento e mortalidade infantil.</p>
 <p>Observa-se que municípios com maior porcentagem de acesso ao saneamento tendem a apresentar menores taxas de mortalidade infantil. A linha de regressão reforça essa tendência, indicando uma associação inversa entre as variáveis.</p>
 <p>Esse resultado evidencia a importância do saneamento básico para a saúde pública, uma vez que melhores condições sanitárias reduzem a exposição a doenças infecciosas e melhoram as condições de vida da população.</p>
+</section>
+</section>
+<section id="ajuste-do-modelo-inicial-de-regressão" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Ajuste do Modelo Inicial de Regressão</h1>
+<p>Inicialmente foi ajustado um modelo de regressão linear múltipla considerando todas as variáveis explicativas disponíveis na base de dados.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>modelo_inicial <span class="ot">&lt;-</span> <span class="fu">lm</span>(tmi <span class="sc">~</span> saneamento <span class="sc">+</span> pib_percapita <span class="sc">+</span> cobertura_psf <span class="sc">+</span> analfabetismo </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                     <span class="sc">+</span> gini <span class="sc">+</span> idh <span class="sc">+</span> renda_percapita <span class="sc">+</span> leitos_mil <span class="sc">+</span> regiao, <span class="at">data =</span> dados)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_inicial)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = tmi ~ saneamento + pib_percapita + cobertura_psf + 
+    analfabetismo + gini + idh + renda_percapita + leitos_mil + 
+    regiao, data = dados)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.9691 -1.9633 -0.1574  1.7480  8.6566 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         48.330419   3.902576  12.384  &lt; 2e-16 ***
+saneamento          -0.171109   0.019995  -8.558 8.58e-16 ***
+pib_percapita       -0.138327   0.124559  -1.111 0.267753    
+cobertura_psf       -0.092532   0.016702  -5.540 7.13e-08 ***
+analfabetismo        0.388790   0.061298   6.343 9.38e-10 ***
+gini                11.673323   3.294386   3.543 0.000465 ***
+idh                -15.201162   3.207358  -4.739 3.46e-06 ***
+renda_percapita     -0.003950   0.001859  -2.124 0.034542 *  
+leitos_mil           0.030203   0.239846   0.126 0.899883    
+regiaoNordeste       0.138602   0.559327   0.248 0.804476    
+regiaoCentro-Oeste  -1.871339   0.945829  -1.979 0.048879 *  
+regiaoSudeste       -2.214032   0.822309  -2.692 0.007533 ** 
+regiaoSul           -2.350338   0.869009  -2.705 0.007270 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.712 on 272 degrees of freedom
+  (15 observations deleted due to missingness)
+Multiple R-squared:  0.9515,    Adjusted R-squared:  0.9493 
+F-statistic: 444.3 on 12 and 272 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Observa-se que o coeficiente de determinação ajustado (R² ajustado) obtido foi de 0.9493, indicando que aproximadamente 94,93% da variabilidade da TMI é explicada pelas variáveis independentes incluídas no modelo, o que sugere um bom nível de ajuste aos dados.</p>
+<p>Temos também que a variável leitos_mil, que indica o número de leitos hospitalares por mil habitantes, apresenta valor-p elevado, indicando menor evidência de associação com a variável resposta do modelo.</p>
+<section id="diagnóstico-de-multicolinearidade" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="diagnóstico-de-multicolinearidade"><span class="header-section-number">5.1</span> Diagnóstico de Multicolinearidade</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(modelo_inicial)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     GVIF Df GVIF^(1/(2*Df))
+saneamento       3.950051  1        1.987474
+pib_percapita   78.995250  1        8.887927
+cobertura_psf    1.725906  1        1.313737
+analfabetismo    5.415994  1        2.327229
+gini             2.001197  1        1.414637
+idh              4.759025  1        2.181519
+renda_percapita 85.884282  1        9.267377
+leitos_mil       1.070969  1        1.034876
+regiao           6.190327  4        1.255926</code></pre>
+</div>
+</div>
+<p>A análise de multicolinearidade do modelo inicial, através do VIF, indicou uma alta correlação entre pib_percapita e renda_percapita.</p>
+<p>Esse resultado é esperado, visto que, além do que foi exposto pela matriz de correlação da análise bivariada dos dados, ambas representam indicadores de nível econômico da população,. Dessa forma, na etapa de seleção do melhor modelo, será considerada a remoção de uma dessas variáveis a fim de reduzir o problema de multicolinearidade.</p>
+</section>
+</section>
+<section id="seleção-de-modelo" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Seleção de Modelo</h1>
+<section id="com-ou-sem-leitos-por-mil-habitantes" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="com-ou-sem-leitos-por-mil-habitantes"><span class="header-section-number">6.1</span> Com ou Sem Leitos por Mil Habitantes</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>modelo_sem_leitos <span class="ot">&lt;-</span> <span class="fu">update</span>(modelo_inicial, . <span class="sc">~</span> . <span class="sc">-</span> leitos_mil)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_sem_leitos)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = tmi ~ saneamento + pib_percapita + cobertura_psf + 
+    analfabetismo + gini + idh + renda_percapita + regiao, data = dados)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.9439 -1.9591 -0.1769  1.7438  8.6669 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         48.546180   3.867076  12.554  &lt; 2e-16 ***
+saneamento          -0.168661   0.019699  -8.562 7.90e-16 ***
+pib_percapita       -0.137200   0.122287  -1.122 0.262859    
+cobertura_psf       -0.091893   0.016483  -5.575 5.89e-08 ***
+analfabetismo        0.389987   0.060928   6.401 6.61e-10 ***
+gini                11.239609   3.235335   3.474 0.000595 ***
+idh                -15.272965   3.179523  -4.804 2.56e-06 ***
+renda_percapita     -0.004027   0.001834  -2.196 0.028944 *  
+regiaoNordeste       0.164035   0.554554   0.296 0.767608    
+regiaoCentro-Oeste  -1.834676   0.939356  -1.953 0.051816 .  
+regiaoSudeste       -2.223071   0.817353  -2.720 0.006946 ** 
+regiaoSul           -2.359487   0.861637  -2.738 0.006576 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.698 on 276 degrees of freedom
+  (12 observations deleted due to missingness)
+Multiple R-squared:  0.9522,    Adjusted R-squared:  0.9503 
+F-statistic: 499.5 on 11 and 276 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(modelo_inicial)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1392.245</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(modelo_sem_leitos)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1402.693</code></pre>
+</div>
+</div>
+<p>Foi avaliada a remoção da variável leitos_mil, uma vez que essa variável apresentou p-valor elevado no modelo inicial. Para isso, foi ajustado um modelo alternativo excluindo essa variável.</p>
+<p>Observou-se que o R² ajustado apresentou pequeno aumento, passando de aproximadamente 0.9493 para 0.9503, indicando leve melhora na proporção de variabilidade explicada pelo modelo.</p>
+<p>Entretanto, ao comparar os modelos utilizando o Critério de Informação de Akaike (AIC), verificou-se que o modelo inicial apresentou AIC = 1392,245, enquanto o modelo sem a variável leitos_mil apresentou AIC = 1402,693.</p>
+<p>Como a diferença nos valores de AIC foi maior que 10, conclui-se que a remoção da variável leitos por mil habitantes resultou em pior desempenho do modelo. Dessa forma, optou-se por manter essa variável no modelo.</p>
+</section>
+<section id="pib-per-capita-ou-renda-per-capita" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="pib-per-capita-ou-renda-per-capita"><span class="header-section-number">6.2</span> PIB per capita ou Renda per capita</h2>
+<section id="apenas-pib-per-capita" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="apenas-pib-per-capita"><span class="header-section-number">6.2.1</span> Apenas PIB per capita</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>modelo_apenas_pib <span class="ot">&lt;-</span> <span class="fu">update</span>(modelo_inicial, . <span class="sc">~</span> . <span class="sc">-</span> renda_percapita)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_apenas_pib)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = tmi ~ saneamento + pib_percapita + cobertura_psf + 
+    analfabetismo + gini + idh + leitos_mil + regiao, data = dados)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.4769 -1.8333 -0.1165  1.6979  8.6422 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         48.14659    3.92664  12.262  &lt; 2e-16 ***
+saneamento          -0.18006    0.01967  -9.153  &lt; 2e-16 ***
+pib_percapita       -0.39409    0.03214 -12.262  &lt; 2e-16 ***
+cobertura_psf       -0.09786    0.01662  -5.889 1.14e-08 ***
+analfabetismo        0.38379    0.06165   6.226 1.80e-09 ***
+gini                13.50565    3.19986   4.221 3.32e-05 ***
+idh                -15.94191    3.20880  -4.968 1.19e-06 ***
+leitos_mil           0.08416    0.24003   0.351   0.7261    
+regiaoNordeste       0.10281    0.56266   0.183   0.8551    
+regiaoCentro-Oeste  -1.74789    0.95010  -1.840   0.0669 .  
+regiaoSudeste       -1.68911    0.78934  -2.140   0.0332 *  
+regiaoSul           -1.86679    0.84405  -2.212   0.0278 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.73 on 273 degrees of freedom
+  (15 observations deleted due to missingness)
+Multiple R-squared:  0.9507,    Adjusted R-squared:  0.9487 
+F-statistic: 478.2 on 11 and 273 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="apenas-renda-per-capita" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="apenas-renda-per-capita"><span class="header-section-number">6.2.2</span> Apenas Renda per capita</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>modelo_apenas_renda <span class="ot">&lt;-</span> <span class="fu">update</span>(modelo_inicial, . <span class="sc">~</span> . <span class="sc">-</span> pib_percapita)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_apenas_renda)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = tmi ~ saneamento + cobertura_psf + analfabetismo + 
+    gini + idh + renda_percapita + leitos_mil + regiao, data = dados)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.6989 -1.9321 -0.1331  1.7600  8.5183 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         4.865e+01  3.894e+00  12.494  &lt; 2e-16 ***
+saneamento         -1.689e-01  1.990e-02  -8.485 1.39e-15 ***
+cobertura_psf      -9.087e-02  1.664e-02  -5.460 1.07e-07 ***
+analfabetismo       3.921e-01  6.125e-02   6.402 6.67e-10 ***
+gini                1.101e+01  3.240e+00   3.396 0.000785 ***
+idh                -1.523e+01  3.209e+00  -4.746 3.34e-06 ***
+renda_percapita    -5.946e-03  4.769e-04 -12.468  &lt; 2e-16 ***
+leitos_mil         -5.685e-03  2.378e-01  -0.024 0.980941    
+regiaoNordeste      1.504e-01  5.595e-01   0.269 0.788204    
+regiaoCentro-Oeste -1.886e+00  9.461e-01  -1.993 0.047263 *  
+regiaoSudeste      -2.469e+00  7.900e-01  -3.125 0.001969 ** 
+regiaoSul          -2.581e+00  8.443e-01  -3.057 0.002461 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.714 on 273 degrees of freedom
+  (15 observations deleted due to missingness)
+Multiple R-squared:  0.9512,    Adjusted R-squared:  0.9493 
+F-statistic: 484.2 on 11 and 273 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="comparação-de-valores-aic" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="comparação-de-valores-aic"><span class="header-section-number">6.2.3</span> Comparação de valores AIC</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(modelo_apenas_pib)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1394.935</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(modelo_apenas_renda)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1391.534</code></pre>
+</div>
+</div>
+<p>Considerando a forte multicolinearidade observada entre as variáveis PIB per capita e Renda per capita, foram ajustados dois modelos alternativos: um mantendo apenas a variável PIB per capita e outro mantendo apenas a variável renda per capita.</p>
+<p>Observou-se que o modelo contendo apenas PIB per capita apresentou R² ajustado = 0,9487 e AIC = 1394,935, enquanto o modelo contendo apenas renda per capita apresentou R² ajustado = 0,9493 e AIC = 1391,534.</p>
+<p>Como o modelo com renda per capita apresentou maior poder explicativo e menor valor de AIC, conclui-se que ele apresenta melhor desempenho. Dessa forma, optou-se por manter a variável renda per capita e remover a variável PIB per capita, resultando em um modelo mais parcimonioso e estatisticamente adequado.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>modelo_final <span class="ot">&lt;-</span> <span class="fu">update</span>(modelo_inicial, . <span class="sc">~</span> . <span class="sc">-</span> pib_percapita)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    GVIF Df GVIF^(1/(2*Df))
+saneamento      3.909669  1        1.977288
+cobertura_psf   1.712071  1        1.308461
+analfabetismo   5.403114  1        2.324460
+gini            1.934448  1        1.390844
+idh             4.758719  1        2.181449
+renda_percapita 5.645016  1        2.375924
+leitos_mil      1.051526  1        1.025439
+regiao          4.973436  4        1.222031</code></pre>
+</div>
+</div>
+<p>Observou-se que as variáveis de renda e analfabetismo apresentaram valores VIF maiores que 5, porém inferiores a 10, indicando multicolinearidade moderada.</p>
+<p>Tal resultado é esperado, uma vez que ambas as variáveis representam indicadores socioeconômicos relacionados ao nível de desenvolvimento, sendo plausível a existência de correlação entre elas. Como os valores de VIF permanecem abaixo do limite crítico frequentemente utilizado (VIF &gt; 10), conclui-se que não há evidência de multicolinearidade severa capaz de comprometer a estabilidade das estimativas do modelo.</p>
+<p>Dessa forma, optou-se por manter ambas as variáveis no modelo, considerando sua relevância interpretativa para explicar a variabilidade da taxa de mortalidade infantil.</p>
+</section>
+</section>
+</section>
+<section id="checando-pressupostos-do-mrlm" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Checando pressupostos do MRLM</h1>
+<section id="plot-do-r-base" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="plot-do-r-base"><span class="header-section-number">7.1</span> Plot do R base</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="report_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="report_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="report_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="report_files/figure-html/unnamed-chunk-23-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="checagem-manual-do-easystats" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="checagem-manual-do-easystats"><span class="header-section-number">7.2</span> Checagem manual do Easystats</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_normality</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: residuals appear as normally distributed (p = 0.219).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_heteroscedasticity</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: Error variance appears to be homoscedastic (p = 0.609).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_outliers</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: No outliers detected.
+- Based on the following method and threshold: cook (0.92).
+- For variable: (Whole model)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_collinearity</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Check for Multicollinearity
+
+Low Correlation
+
+          Term  VIF   VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
+    saneamento 3.91 [3.25, 4.77]     1.98      0.26     [0.21, 0.31]
+ cobertura_psf 1.71 [1.49, 2.04]     1.31      0.58     [0.49, 0.67]
+          gini 1.93 [1.67, 2.31]     1.39      0.52     [0.43, 0.60]
+           idh 4.76 [3.93, 5.83]     2.18      0.21     [0.17, 0.25]
+    leitos_mil 1.05 [1.00, 1.55]     1.03      0.95     [0.65, 1.00]
+        regiao 4.97 [4.10, 6.09]     1.22      0.20     [0.16, 0.24]
+
+Moderate Correlation
+
+            Term  VIF   VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
+   analfabetismo 5.40 [4.44, 6.63]     2.32      0.19     [0.15, 0.22]
+ renda_percapita 5.65 [4.64, 6.93]     2.38      0.18     [0.14, 0.22]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_autocorrelation</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.866).</code></pre>
+</div>
+</div>
+</section>
+<section id="análise-gráfica-de-todos-os-pressupostos" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="análise-gráfica-de-todos-os-pressupostos"><span class="header-section-number">7.3</span> Análise gráfica de todos os pressupostos</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="report_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 
