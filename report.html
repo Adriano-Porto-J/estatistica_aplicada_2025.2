@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.32">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,9 +11,6 @@
 
 <title>Análise da Taxa de Mortalidade Infantil e Indicadores Socioeconômicos</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -66,14 +63,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="report_files/libs/clipboard/clipboard.min.js"></script>
 <script src="report_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="report_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="report_files/libs/quarto-html/popper.min.js"></script>
 <script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="report_files/libs/quarto-html/anchor.min.js"></script>
 <link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-067f8ab80d092ae3595f7402c2c9b667.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="report_files/libs/bootstrap/bootstrap-67270d1595a62d14f123c043d4fb2f18.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="report_files/libs/bootstrap/bootstrap-ba858d548ad92676443b74b489ccbdac.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -128,6 +126,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#checagem-manual-do-easystats" id="toc-checagem-manual-do-easystats" class="nav-link" data-scroll-target="#checagem-manual-do-easystats"><span class="header-section-number">7.2</span> Checagem manual do Easystats</a></li>
   <li><a href="#análise-gráfica-de-todos-os-pressupostos" id="toc-análise-gráfica-de-todos-os-pressupostos" class="nav-link" data-scroll-target="#análise-gráfica-de-todos-os-pressupostos"><span class="header-section-number">7.3</span> Análise gráfica de todos os pressupostos</a></li>
   </ul></li>
+  <li><a href="#previsões" id="toc-previsões" class="nav-link" data-scroll-target="#previsões"><span class="header-section-number">8</span> Previsões</a>
+  <ul class="collapse">
+  <li><a href="#novas-preditoras" id="toc-novas-preditoras" class="nav-link" data-scroll-target="#novas-preditoras"><span class="header-section-number">8.1</span> Novas preditoras</a></li>
+  <li><a href="#intervalo-de-confiança" id="toc-intervalo-de-confiança" class="nav-link" data-scroll-target="#intervalo-de-confiança"><span class="header-section-number">8.2</span> Intervalo de Confiança</a></li>
+  <li><a href="#intervalo-de-predição" id="toc-intervalo-de-predição" class="nav-link" data-scroll-target="#intervalo-de-predição"><span class="header-section-number">8.3</span> Intervalo de Predição</a></li>
+  <li><a href="#comparação-entre-intervalos" id="toc-comparação-entre-intervalos" class="nav-link" data-scroll-target="#comparação-entre-intervalos"><span class="header-section-number">8.4</span> Comparação entre Intervalos</a></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão"><span class="header-section-number">8.5</span> Conclusão</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Outros formatos</h2><ul><li><a href="report.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -153,7 +159,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">13 de março de 2026</p>
+      <p class="date">15 de março de 2026</p>
     </div>
   </div>
   
@@ -1084,7 +1090,7 @@ Moderate Correlation
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_autocorrelation</span>(modelo_final)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.866).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.824).</code></pre>
 </div>
 </div>
 </section>
@@ -1100,6 +1106,275 @@ Moderate Correlation
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="previsões" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Previsões</h1>
+<p>Para realizar previsões com o modelo ajustado, é importante considerar valores das variáveis explicativas dentro dos intervalos observados na base de dados. Isso evita extrapolações que podem comprometer a confiabilidade das estimativas produzidas pelo modelo.</p>
+<p>Assim, inicialmente apresenta-se um breve resumo das variáveis presentes na base de dados.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(dados)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 300
+Columns: 11
+$ id              &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,…
+$ tmi             &lt;dbl&gt; 9.99, 23.74, 1.50, 2.47, 16.11, 1.50, 35.44, 30.30, 10…
+$ saneamento      &lt;dbl&gt; 74.4, 62.4, 82.4, 75.4, 68.3, 87.2, 48.0, 52.3, 72.7, …
+$ pib_percapita   &lt;dbl&gt; 25.09, 19.41, 36.21, 28.64, 21.22, 30.43, 11.36, 13.41…
+$ cobertura_psf   &lt;dbl&gt; 73.4, 73.3, 72.8, 68.8, 78.1, 94.7, 58.8, 59.0, 66.3, …
+$ analfabetismo   &lt;dbl&gt; 7.8, 19.4, 2.7, 8.9, 13.5, 5.0, 22.2, 24.1, 7.7, 8.8, …
+$ gini            &lt;dbl&gt; 0.569, 0.588, 0.521, 0.492, 0.450, 0.506, 0.552, 0.596…
+$ idh             &lt;dbl&gt; 0.950, 0.938, 0.950, 0.950, 0.950, 0.950, 0.802, 0.842…
+$ renda_percapita &lt;dbl&gt; 1693, 1445, 2443, 2094, 1451, 2084, 753, 927, 1657, 20…
+$ leitos_mil      &lt;dbl&gt; 0.84, 2.21, 2.76, 2.02, 1.60, 2.72, 0.89, 0.20, 0.20, …
+$ regiao          &lt;fct&gt; Sul, Nordeste, Sudeste, Sudeste, Nordeste, Sudeste, No…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dados)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id              tmi           saneamento    pib_percapita  
+ Min.   :  1.00   Min.   : 1.500   Min.   :14.60   Min.   : 3.00  
+ 1st Qu.: 75.75   1st Qu.: 9.863   1st Qu.:52.15   1st Qu.:11.68  
+ Median :150.50   Median :18.570   Median :63.80   Median :19.64  
+ Mean   :150.50   Mean   :19.890   Mean   :63.26   Mean   :20.11  
+ 3rd Qu.:225.25   3rd Qu.:28.890   3rd Qu.:74.40   3rd Qu.:27.22  
+ Max.   :300.00   Max.   :48.820   Max.   :99.50   Max.   :53.87  
+                                   NA's   :5                      
+ cobertura_psf   analfabetismo        gini             idh        
+ Min.   :32.70   Min.   : 0.00   Min.   :0.3630   Min.   :0.5980  
+ 1st Qu.:56.08   1st Qu.: 6.80   1st Qu.:0.5020   1st Qu.:0.7945  
+ Median :64.95   Median :11.40   Median :0.5550   Median :0.9500  
+ Mean   :64.44   Mean   :11.95   Mean   :0.5515   Mean   :0.8684  
+ 3rd Qu.:73.40   3rd Qu.:16.10   3rd Qu.:0.6022   3rd Qu.:0.9500  
+ Max.   :98.80   Max.   :30.40   Max.   :0.7340   Max.   :0.9500  
+ NA's   :4       NA's   :3                                        
+ renda_percapita    leitos_mil             regiao  
+ Min.   : 150.0   Min.   :0.200   Norte       :38  
+ 1st Qu.: 797.2   1st Qu.:0.400   Nordeste    :81  
+ Median :1411.0   Median :0.940   Centro-Oeste:32  
+ Mean   :1419.6   Mean   :1.029   Sudeste     :99  
+ 3rd Qu.:1947.2   3rd Qu.:1.460   Sul         :50  
+ Max.   :3710.0   Max.   :3.300                    
+                  NA's   :3                        </code></pre>
+</div>
+</div>
+<p>A partir do resumo das variáveis observa-se que a taxa de mortalidade infantil (TMI) varia aproximadamente entre 1,5 e 48,8 óbitos por mil nascidos vivos, com média próxima de 19,89.</p>
+<p>Entre as variáveis explicativas, o acesso ao saneamento varia aproximadamente entre 14,6% e 99,5%, enquanto a renda per capita apresenta valores entre 150 e 3710 unidades monetárias. Indicadores como analfabetismo, cobertura da atenção básica à saúde e índice de desenvolvimento humano também apresentam variação relevante entre as observações.</p>
+<p>Esses intervalos permitem verificar que os valores utilizados nas previsões se encontram dentro de cenários plausíveis observados na base de dados.</p>
+<section id="novas-preditoras" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="novas-preditoras"><span class="header-section-number">8.1</span> Novas preditoras</h2>
+<p>Para ilustrar o processo de previsão utilizando o modelo ajustado, foram definidos três cenários hipotéticos contendo diferentes combinações de valores para as variáveis explicativas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>novas.preditoras <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">saneamento =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">70</span>, <span class="dv">90</span>),</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cobertura_psf =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">90</span>),</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">analfabetismo =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">8</span>, <span class="dv">3</span>),</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gini =</span> <span class="fu">c</span>(<span class="fl">0.55</span>, <span class="fl">0.50</span>, <span class="fl">0.45</span>),</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">idh =</span> <span class="fu">c</span>(<span class="fl">0.65</span>, <span class="fl">0.75</span>, <span class="fl">0.85</span>),</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">renda_percapita =</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">1200</span>, <span class="dv">2500</span>),</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">leitos_mil =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>),</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">regiao =</span> <span class="fu">factor</span>(</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"Nordeste"</span>, <span class="st">"Centro-Oeste"</span>, <span class="st">"Sudeste"</span>),</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> <span class="fu">levels</span>(dados<span class="sc">$</span>regiao)</span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>novas.preditoras <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">saneamento</th>
+<th style="text-align: right;">cobertura_psf</th>
+<th style="text-align: right;">analfabetismo</th>
+<th style="text-align: right;">gini</th>
+<th style="text-align: right;">idh</th>
+<th style="text-align: right;">renda_percapita</th>
+<th style="text-align: right;">leitos_mil</th>
+<th style="text-align: left;">regiao</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Nordeste</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">1200</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Centro-Oeste</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">2500</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sudeste</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Os cenários representam diferentes níveis de desenvolvimento socioeconômico.</p>
+<p>O primeiro cenário apresenta menor acesso ao saneamento, maior taxa de analfabetismo e menor renda per capita, características associadas a contextos socioeconômicos menos favorecidos.</p>
+<p>O segundo cenário apresenta condições intermediárias em relação aos indicadores analisados.</p>
+<p>Já o terceiro cenário representa um contexto mais desenvolvido, com maior acesso ao saneamento, menor taxa de analfabetismo, maior renda per capita e maior disponibilidade de leitos hospitalares.</p>
+</section>
+<section id="intervalo-de-confiança" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="intervalo-de-confiança"><span class="header-section-number">8.2</span> Intervalo de Confiança</h2>
+<p>Um <strong>intervalo de confiança</strong> captura a incerteza associada à estimativa do <strong>valor médio esperado da variável resposta</strong>, dado um conjunto específico de valores para as variáveis explicativas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>tab_IC <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  modelo_final,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  novas.preditoras,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="st">"confidence"</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>tab_IC <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(tab_IC)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tab_IC) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Media_Prevista"</span>,</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Limite_Inferior"</span>,</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Limite_Superior"</span></span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>tab_IC</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Media_Prevista Limite_Inferior Limite_Superior
+1      35.962273       34.582894       37.341652
+2      18.197336       16.798650       19.596021
+3       1.104733       -0.633686        2.843153</code></pre>
+</div>
+</div>
+<p>Os resultados indicam que, no primeiro cenário, a TMI média esperada é aproximadamente 35,96 óbitos por mil nascidos vivos, com intervalo de confiança entre 34,58 e 37,34.</p>
+<p>No segundo cenário, a TMI média estimada é aproximadamente 18,20, com intervalo entre 16,80 e 19,60.</p>
+<p>No terceiro cenário, a TMI média estimada é aproximadamente 1,10, com intervalo entre -0,63 e 2,84.</p>
+<p>Observa-se, portanto, uma redução consistente da taxa de mortalidade infantil à medida que os indicadores socioeconômicos apresentam melhora.</p>
+</section>
+<section id="intervalo-de-predição" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="intervalo-de-predição"><span class="header-section-number">8.3</span> Intervalo de Predição</h2>
+<p>Um <strong>intervalo de predição</strong> captura a incerteza associada à previsão de <strong>uma observação individual</strong>, e não apenas do valor médio esperado.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>tab_IP <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  modelo_final,</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  novas.preditoras,</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="st">"prediction"</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>tab_IP <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(tab_IP, <span class="at">row.names =</span> <span class="cn">NULL</span>)</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tab_IP) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Valor_Previsto"</span>,</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Limite_Inferior_Prev"</span>,</span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Limite_Superior_Prev"</span></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>tab_IP</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Valor_Previsto Limite_Inferior_Prev Limite_Superior_Prev
+1      35.962273            30.444991            41.479554
+2      18.197336            12.675196            23.719476
+3       1.104733            -4.513079             6.722545</code></pre>
+</div>
+</div>
+<p>Os resultados indicam que, no primeiro cenário, a TMI prevista é aproximadamente 35,96, com intervalo de predição entre 30,44 e 41,48.</p>
+<p>No segundo cenário, a previsão é aproximadamente 18,20, com intervalo entre 12,68 e 23,72.</p>
+<p>No terceiro cenário, a previsão é aproximadamente 1,10, com intervalo entre -4,51 e 6,72.</p>
+<p>Observa-se que os intervalos de predição são mais amplos que os intervalos de confiança, refletindo a variabilidade individual presente nos dados.</p>
+<p>No terceiro cenário, o limite inferior do intervalo de predição assume valor negativo. Como a taxa de mortalidade infantil não pode assumir valores negativos na prática, esse resultado deve ser interpretado como uma indicação de que a mortalidade prevista é muito próxima de zero. Esse comportamento ocorre porque o modelo de regressão linear não impõe restrições ao intervalo de valores possíveis da variável resposta.</p>
+</section>
+<section id="comparação-entre-intervalos" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="comparação-entre-intervalos"><span class="header-section-number">8.4</span> Comparação entre Intervalos</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>tab_IC_e_IP <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(tab_IC, tab_IP)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>tab_IC_e_IP <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 14%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Media_Prevista</th>
+<th style="text-align: right;">Limite_Inferior</th>
+<th style="text-align: right;">Limite_Superior</th>
+<th style="text-align: right;">Valor_Previsto</th>
+<th style="text-align: right;">Limite_Inferior_Prev</th>
+<th style="text-align: right;">Limite_Superior_Prev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">35.962273</td>
+<td style="text-align: right;">34.582894</td>
+<td style="text-align: right;">37.341652</td>
+<td style="text-align: right;">35.962273</td>
+<td style="text-align: right;">30.444991</td>
+<td style="text-align: right;">41.479554</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18.197336</td>
+<td style="text-align: right;">16.798650</td>
+<td style="text-align: right;">19.596021</td>
+<td style="text-align: right;">18.197336</td>
+<td style="text-align: right;">12.675196</td>
+<td style="text-align: right;">23.719476</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.104733</td>
+<td style="text-align: right;">-0.633686</td>
+<td style="text-align: right;">2.843153</td>
+<td style="text-align: right;">1.104733</td>
+<td style="text-align: right;">-4.513078</td>
+<td style="text-align: right;">6.722545</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>A comparação entre os resultados mostra que os intervalos de predição são sistematicamente mais amplos do que os intervalos de confiança para os cenários analisados.</p>
+<p>Por exemplo, no primeiro cenário o intervalo de confiança varia entre 34,58 e 37,34, enquanto o intervalo de predição se estende de aproximadamente 30,44 a 41,48.</p>
+<p>Esse padrão se repete nos demais cenários, evidenciando que a incerteza associada à previsão de valores individuais é maior do que aquela relacionada à estimativa do valor médio esperado da variável resposta.</p>
+<p>Esses resultados reforçam a importância de distinguir entre inferência sobre valores médios populacionais e previsão de observações individuais ao interpretar os resultados de modelos de regressão.</p>
+</section>
+<section id="conclusão" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="conclusão"><span class="header-section-number">8.5</span> Conclusão</h2>
+<p>A análise realizada por meio do modelo de regressão linear permitiu identificar associações relevantes entre a taxa de mortalidade infantil e diferentes indicadores socioeconômicos e de infraestrutura. De forma geral, observou-se que melhores condições de desenvolvimento — como maior acesso ao saneamento, maior renda per capita, menor taxa de analfabetismo e melhores indicadores de saúde — estão associadas a menores níveis de mortalidade infantil.</p>
+<p>As previsões realizadas para cenários hipotéticos reforçam esse padrão, evidenciando uma redução consistente na taxa de mortalidade infantil à medida que os indicadores socioeconômicos apresentam melhoria. Observa-se ainda que os intervalos de predição são mais amplos do que os intervalos de confiança, refletindo a maior incerteza associada à previsão de observações individuais.</p>
+<p>Apesar de algumas limitações inerentes ao modelo de regressão linear — como a possibilidade de gerar valores previstos fora do intervalo plausível da variável resposta — os resultados obtidos fornecem evidências consistentes sobre a relação entre condições socioeconômicas e mortalidade infantil.</p>
+<p>De maneira geral, os resultados destacam a importância de políticas públicas voltadas à melhoria das condições de saneamento, educação, renda e acesso aos serviços de saúde como estratégias fundamentais para a redução da mortalidade infantil.</p>
 </section>
 </section>
 

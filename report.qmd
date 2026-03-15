@@ -263,6 +263,7 @@ summary(modelo_sem_leitos)
 ```{r}
 AIC(modelo_inicial)
 ```
+
 ```{r}
 AIC(modelo_sem_leitos)
 ```
@@ -286,6 +287,7 @@ summary(modelo_apenas_pib)
 ```
 
 ### Apenas Renda per capita
+
 ```{r}
 modelo_apenas_renda <- update(modelo_inicial, . ~ . - pib_percapita)
 
@@ -316,18 +318,20 @@ vif(modelo_final)
 
 Observou-se que as variáveis de renda e analfabetismo apresentaram valores VIF maiores que 5, porém inferiores a 10, indicando multicolinearidade moderada.
 
-Tal resultado é esperado, uma vez que ambas as variáveis representam indicadores socioeconômicos relacionados ao nível de desenvolvimento, sendo plausível a existência de correlação entre elas. Como os valores de VIF permanecem abaixo do limite crítico frequentemente utilizado (VIF > 10), conclui-se que não há evidência de multicolinearidade severa capaz de comprometer a estabilidade das estimativas do modelo.
+Tal resultado é esperado, uma vez que ambas as variáveis representam indicadores socioeconômicos relacionados ao nível de desenvolvimento, sendo plausível a existência de correlação entre elas. Como os valores de VIF permanecem abaixo do limite crítico frequentemente utilizado (VIF \> 10), conclui-se que não há evidência de multicolinearidade severa capaz de comprometer a estabilidade das estimativas do modelo.
 
 Dessa forma, optou-se por manter ambas as variáveis no modelo, considerando sua relevância interpretativa para explicar a variabilidade da taxa de mortalidade infantil.
 
 # Checando pressupostos do MRLM
 
 ## Plot do R base
+
 ```{r}
 plot(modelo_final)
 ```
 
 ## Checagem manual do Easystats
+
 ```{r}
 check_normality(modelo_final)
 ```
@@ -349,6 +353,147 @@ check_autocorrelation(modelo_final)
 ```
 
 ## Análise gráfica de todos os pressupostos
+
 ```{r, fig.width=5, fig.height=5}
 check_model(modelo_final)
 ```
+
+# Previsões
+
+Para realizar previsões com o modelo ajustado, é importante considerar valores das variáveis explicativas dentro dos intervalos observados na base de dados. Isso evita extrapolações que podem comprometer a confiabilidade das estimativas produzidas pelo modelo.
+
+Assim, inicialmente apresenta-se um breve resumo das variáveis presentes na base de dados.
+
+```{r}
+glimpse(dados)
+```
+
+```{r}
+summary(dados)
+```
+
+A partir do resumo das variáveis observa-se que a taxa de mortalidade infantil (TMI) varia aproximadamente entre 1,5 e 48,8 óbitos por mil nascidos vivos, com média próxima de 19,89.
+
+Entre as variáveis explicativas, o acesso ao saneamento varia aproximadamente entre 14,6% e 99,5%, enquanto a renda per capita apresenta valores entre 150 e 3710 unidades monetárias. Indicadores como analfabetismo, cobertura da atenção básica à saúde e índice de desenvolvimento humano também apresentam variação relevante entre as observações.
+
+Esses intervalos permitem verificar que os valores utilizados nas previsões se encontram dentro de cenários plausíveis observados na base de dados.
+
+## Novas preditoras
+
+Para ilustrar o processo de previsão utilizando o modelo ajustado, foram definidos três cenários hipotéticos contendo diferentes combinações de valores para as variáveis explicativas.
+
+```{r}
+novas.preditoras <- data.frame(
+  saneamento = c(40, 70, 90),
+  cobertura_psf = c(50, 75, 90),
+  analfabetismo = c(15, 8, 3),
+  gini = c(0.55, 0.50, 0.45),
+  idh = c(0.65, 0.75, 0.85),
+  renda_percapita = c(600, 1200, 2500),
+  leitos_mil = c(1.0, 2.0, 3.0),
+  regiao = factor(
+    c("Nordeste", "Centro-Oeste", "Sudeste"),
+    levels = levels(dados$regiao)
+  )
+)
+```
+
+```{r}
+novas.preditoras %>% knitr::kable()
+```
+
+Os cenários representam diferentes níveis de desenvolvimento socioeconômico.
+
+O primeiro cenário apresenta menor acesso ao saneamento, maior taxa de analfabetismo e menor renda per capita, características associadas a contextos socioeconômicos menos favorecidos.
+
+O segundo cenário apresenta condições intermediárias em relação aos indicadores analisados.
+
+Já o terceiro cenário representa um contexto mais desenvolvido, com maior acesso ao saneamento, menor taxa de analfabetismo, maior renda per capita e maior disponibilidade de leitos hospitalares.
+
+## Intervalo de Confiança
+
+Um **intervalo de confiança** captura a incerteza associada à estimativa do **valor médio esperado da variável resposta**, dado um conjunto específico de valores para as variáveis explicativas.
+
+```{r}
+tab_IC <- predict(
+  modelo_final,
+  novas.preditoras,
+  interval = "confidence"
+)
+
+tab_IC <- as.data.frame(tab_IC)
+
+names(tab_IC) <- c(
+  "Media_Prevista",
+  "Limite_Inferior",
+  "Limite_Superior"
+)
+
+tab_IC
+```
+
+Os resultados indicam que, no primeiro cenário, a TMI média esperada é aproximadamente 35,96 óbitos por mil nascidos vivos, com intervalo de confiança entre 34,58 e 37,34.
+
+No segundo cenário, a TMI média estimada é aproximadamente 18,20, com intervalo entre 16,80 e 19,60.
+
+No terceiro cenário, a TMI média estimada é aproximadamente 1,10, com intervalo entre -0,63 e 2,84.
+
+Observa-se, portanto, uma redução consistente da taxa de mortalidade infantil à medida que os indicadores socioeconômicos apresentam melhora.
+
+## Intervalo de Predição
+
+Um **intervalo de predição** captura a incerteza associada à previsão de **uma observação individual**, e não apenas do valor médio esperado.
+
+```{r}
+tab_IP <- predict(
+  modelo_final,
+  novas.preditoras,
+  interval = "prediction"
+)
+
+tab_IP <- as.data.frame(tab_IP, row.names = NULL)
+
+names(tab_IP) <- c(
+  "Valor_Previsto",
+  "Limite_Inferior_Prev",
+  "Limite_Superior_Prev"
+)
+
+tab_IP
+```
+
+Os resultados indicam que, no primeiro cenário, a TMI prevista é aproximadamente 35,96, com intervalo de predição entre 30,44 e 41,48.
+
+No segundo cenário, a previsão é aproximadamente 18,20, com intervalo entre 12,68 e 23,72.
+
+No terceiro cenário, a previsão é aproximadamente 1,10, com intervalo entre -4,51 e 6,72.
+
+Observa-se que os intervalos de predição são mais amplos que os intervalos de confiança, refletindo a variabilidade individual presente nos dados.
+
+No terceiro cenário, o limite inferior do intervalo de predição assume valor negativo. Como a taxa de mortalidade infantil não pode assumir valores negativos na prática, esse resultado deve ser interpretado como uma indicação de que a mortalidade prevista é muito próxima de zero. Esse comportamento ocorre porque o modelo de regressão linear não impõe restrições ao intervalo de valores possíveis da variável resposta.
+
+## Comparação entre Intervalos
+
+```{r}
+tab_IC_e_IP <- cbind.data.frame(tab_IC, tab_IP)
+
+tab_IC_e_IP %>% knitr::kable()
+```
+
+A comparação entre os resultados mostra que os intervalos de predição são sistematicamente mais amplos do que os intervalos de confiança para os cenários analisados.
+
+Por exemplo, no primeiro cenário o intervalo de confiança varia entre 34,58 e 37,34, enquanto o intervalo de predição se estende de aproximadamente 30,44 a 41,48.
+
+Esse padrão se repete nos demais cenários, evidenciando que a incerteza associada à previsão de valores individuais é maior do que aquela relacionada à estimativa do valor médio esperado da variável resposta.
+
+Esses resultados reforçam a importância de distinguir entre inferência sobre valores médios populacionais e previsão de observações individuais ao interpretar os resultados de modelos de regressão.
+
+## Conclusão
+
+A análise realizada por meio do modelo de regressão linear permitiu identificar associações relevantes entre a taxa de mortalidade infantil e diferentes indicadores socioeconômicos e de infraestrutura. De forma geral, observou-se que melhores condições de desenvolvimento — como maior acesso ao saneamento, maior renda per capita, menor taxa de analfabetismo e melhores indicadores de saúde — estão associadas a menores níveis de mortalidade infantil.
+
+As previsões realizadas para cenários hipotéticos reforçam esse padrão, evidenciando uma redução consistente na taxa de mortalidade infantil à medida que os indicadores socioeconômicos apresentam melhoria. Observa-se ainda que os intervalos de predição são mais amplos do que os intervalos de confiança, refletindo a maior incerteza associada à previsão de observações individuais.
+
+Apesar de algumas limitações inerentes ao modelo de regressão linear — como a possibilidade de gerar valores previstos fora do intervalo plausível da variável resposta — os resultados obtidos fornecem evidências consistentes sobre a relação entre condições socioeconômicas e mortalidade infantil.
+
+De maneira geral, os resultados destacam a importância de políticas públicas voltadas à melhoria das condições de saneamento, educação, renda e acesso aos serviços de saúde como estratégias fundamentais para a redução da mortalidade infantil.
