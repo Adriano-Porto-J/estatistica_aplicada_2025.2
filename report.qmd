@@ -354,7 +354,7 @@ check_autocorrelation(modelo_final)
 
 ## Análise gráfica de todos os pressupostos
 
-```{r, fig.width=5, fig.height=5}
+```{r, fig.width=12, fig.height=12}
 check_model(modelo_final)
 ```
 
